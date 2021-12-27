@@ -1,6 +1,7 @@
 import { app } from "./app";
 
-app.listen(3000, () => console.log("Express app listening on port 3000 "));
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => console.log(`App listening on port ${PORT}`));
 
 //this is due to some issues with prisma and ts-node-dev
 process.on("SIGTERM", (err: any) => {

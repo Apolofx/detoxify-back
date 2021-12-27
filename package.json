@@ -6,8 +6,9 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "npm run dist/index.js",
-    "dev": "ts-node-dev ./src/server.ts "
+    "start": "node dist/server.js",
+    "dev": "ts-node-dev ./src/server.ts",
+    "build": "tsc"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
