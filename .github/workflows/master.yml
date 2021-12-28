@@ -16,12 +16,11 @@ jobs:
         with:
           node-version: "12.x"
       - name: Install Dependencies and run tests suite
-        run: npm ci
+        run: npm install
       - run: npm run build --if-present
-      - run: npm test
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
+      #- run: npm test
+      #Deploy to heroku
+      - name: Depoy to Heroku
       - uses: actions/checkout@v2
       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
