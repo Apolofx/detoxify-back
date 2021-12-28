@@ -16,8 +16,8 @@ jobs:
         with:
           node-version: "12.x"
       - name: Install Dependencies and run tests suite
-        run: npm install
-      - run: npm run build --if-present
+        run: yarn
+      - run: yarn build
       #- run: npm test
       #Deploy to heroku
       - name: Depoy to Heroku
