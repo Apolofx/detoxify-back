@@ -35,5 +35,5 @@ jobs:
           heroku_app_name: "detoxify-back-dev" #Must be unique in Heroku
           heroku_email: "nacho.conso@gmail.com"
           healthcheck: "https://detoxify-back-dev.herokuapp.com/health"
-          delay: 5
+          delay: 10
           rollbackonhealthcheckfailed: true
