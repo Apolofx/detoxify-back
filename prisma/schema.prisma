@@ -21,6 +21,8 @@ model User {
   achievements Achievement[]
   Team         Team?         @relation(fields: [teamId], references: [id])
   teamId       Int?
+
+  @@map("users")
 }
 
 model UserDetails {
@@ -32,6 +34,8 @@ model UserDetails {
   userId       Int
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+
+  @@map("user_details")
 }
 
 model Event {
@@ -41,6 +45,8 @@ model Event {
   userId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("events")
 }
 
 model Team {
@@ -49,6 +55,8 @@ model Team {
   users     User[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("teams")
 }
 
 model Achievement {
@@ -58,6 +66,8 @@ model Achievement {
   userId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("achievements")
 }
 
 // model Post {

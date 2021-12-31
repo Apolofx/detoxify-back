@@ -3,22 +3,64 @@ name: Node.js CI-CD
 on:
   push:
     branches: [master]
-  # pull_request:
-  #   branches: [master]
+  pull_request:
+    branches: [master]
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps TCP port 5432 on service container to the host
+          - 5432:5432
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+      - run: yarn
+      # run the migration in the test database
+      - run: npx prisma db push
+  #      - run: npm run test
+
   build:
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
           node-version: "12.x"
+
       - name: Install Dependencies and run tests suite
         run: yarn
       - run: yarn build
       #- run: npm tests
+
+      #Run Migrations
+      - name: Run Prod Migrations
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL_PROD }}
+          NODE_ENV: production
+
       #Deploy to heroku
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
@@ -27,5 +69,5 @@ jobs:
           heroku_app_name: "detoxify-back" #Must be unique in Heroku
           heroku_email: "nacho.conso@gmail.com"
           healthcheck: "https://detoxify-back.herokuapp.com/health"
-          delay: 10
+          delay: 5
           rollbackonhealthcheckfailed: true
