@@ -15,7 +15,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "12.x"
-          
+
       - name: Install Dependencies and run tests suite
         run: yarn
       - run: yarn build
@@ -23,12 +23,9 @@ jobs:
 
       #Seeds and migrations
       - name: Run Migrations and Seeds
-        run: |
-          npx prisma migrate deploy
-          npx prisma db seed
+        run: npx prisma migrate deploy
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL_DEV }}
-          NODE_ENV: dev
 
       #Deploy to heroku
       - name: Deploy to Heroku
