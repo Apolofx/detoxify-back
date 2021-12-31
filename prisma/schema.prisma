@@ -20,7 +20,7 @@ model User {
   events       Event[]
   achievements Achievement[]
   Team         Team?         @relation(fields: [teamId], references: [id])
-  teamId       Int
+  teamId       Int?
 }
 
 model UserDetails {
