@@ -42,7 +42,8 @@ app.get("/users/:id", async (req, res) => {
       id: id,
     },
   });
-  res.send(user);
+  if (!user) return res.sendStatus(404);
+  return res.json(user);
 });
 
 app.use("*", (req, res) => {

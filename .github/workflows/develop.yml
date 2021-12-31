@@ -1,10 +1,10 @@
-name: Node.js CI-CD
+name: Node.js CI-CD dev
 
 on:
   push:
-    branches: [master]
+    branches: [develop]
   # pull_request:
-  #   branches: [master]
+  #   branches: [develop]
 
 jobs:
   build:
@@ -19,13 +19,21 @@ jobs:
         run: yarn
       - run: yarn build
       #- run: npm test
+      #Seeds
+      - name: Run Migrations and Seeds
+        run: |
+          npx prisma migrate deploy
+          npx prisma db seed
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL_DEV }}
+          NODE_ENV: dev
       #Deploy to heroku
       - name: Depoy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "detoxify-back" #Must be unique in Heroku
+          heroku_app_name: "detoxify-back-dev" #Must be unique in Heroku
           heroku_email: "nacho.conso@gmail.com"
-          healthcheck: "https://detoxify-back.herokuapp.com/health"
+          healthcheck: "https://detoxify-back-dev.herokuapp.com/health"
           delay: 5
           rollbackonhealthcheckfailed: true
