@@ -8,7 +8,7 @@
   "scripts": {
     "start": "node dist/server.js",
     "dev": "ts-node-dev ./src/server.ts",
-    "build": "tsc"
+    "build": "npx tsc"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
