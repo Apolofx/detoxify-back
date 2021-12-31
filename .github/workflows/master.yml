@@ -15,10 +15,19 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "12.x"
+
       - name: Install Dependencies and run tests suite
         run: yarn
       - run: yarn build
       #- run: npm tests
+
+      #Run Migrations
+      - name: Run Prod Migrations
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL_PROD }}
+          NODE_ENV: production
+
       #Deploy to heroku
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
@@ -27,5 +36,5 @@ jobs:
           heroku_app_name: "detoxify-back" #Must be unique in Heroku
           heroku_email: "nacho.conso@gmail.com"
           healthcheck: "https://detoxify-back.herokuapp.com/health"
-          delay: 10
+          delay: 5
           rollbackonhealthcheckfailed: true
