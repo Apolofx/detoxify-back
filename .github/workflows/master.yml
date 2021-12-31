@@ -18,7 +18,7 @@ jobs:
       - name: Install Dependencies and run tests suite
         run: yarn
       - run: yarn build
-      #- run: npm test
+      #- run: npm tests
       #Deploy to heroku
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
