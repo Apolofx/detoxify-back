@@ -6,10 +6,9 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "node dist/server.js",
+    "start": "node dist/src/server.js",
     "dev": "ts-node-dev ./src/server.ts",
-    "build": "tsc",
-    "postinstall": "yarn build"
+    "build": "tsc"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
