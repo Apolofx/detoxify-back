@@ -3,8 +3,6 @@ name: Node.js CI-CD dev
 on:
   push:
     branches: [develop]
-  # pull_request:
-  #   branches: [develop]
 
 jobs:
   test:
@@ -47,9 +45,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "12.x"
-      - name: Install Dependencies and run tests suite
         run: yarn
-      # - run: yarn test
 
       #Migrations
       - name: Run Migrations
@@ -65,5 +61,5 @@ jobs:
           heroku_app_name: "detoxify-back-dev" #Must be unique in Heroku
           heroku_email: "nacho.conso@gmail.com"
           healthcheck: "https://detoxify-back-dev.herokuapp.com/health"
-          delay: 5
+          delay: 10
           rollbackonhealthcheckfailed: true
