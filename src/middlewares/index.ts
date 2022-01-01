@@ -1,0 +1,1 @@
+export { ignoreFavicon } from "./ignoreFavicon";

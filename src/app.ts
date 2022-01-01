@@ -1,15 +1,28 @@
+import "./utils/helpers/sentry";
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
+import morgan from "morgan";
+import * as Sentry from "@sentry/node";
+import { SentryInit } from "./utils/helpers";
+
 import { PrismaClient } from "@prisma/client";
 import {
   PrismaClientKnownRequestError,
   PrismaClientValidationError,
 } from "@prisma/client/runtime";
-const prisma = new PrismaClient();
+import { ignoreFavicon } from "./middlewares";
 
+const prisma = new PrismaClient();
 const app = express();
+
+SentryInit(app);
+app.use(Sentry.Handlers.requestHandler());
+app.use(Sentry.Handlers.tracingHandler());
+
+app.use(ignoreFavicon);
 app.use(cors());
 app.use(express.json());
+app.use(morgan("dev"));
 
 app.get("/health", (_req, res) => {
   const response = {
@@ -60,11 +73,13 @@ app.use("/users/*", (req, res) => {
   res.sendStatus(404);
 });
 app.use("*", (req, res) => {
+  throw new Error();
   res.sendStatus(400);
 });
 
+app.use(Sentry.Handlers.errorHandler());
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  res.status(500).json("Internal Server Error");
+  return res.status(500).json("Internal Server Error");
 });
 
 export { app };
