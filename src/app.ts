@@ -46,6 +46,7 @@ app.get("/users", async (req, res) => {
 });
 app.get("/users/:id", async (req, res) => {
   const id = parseInt(req.params.id);
+  if (!id) return res.status(400).json({ message: "Invalid user id value" });
   const user = await prisma.user.findUnique({
     where: {
       id,
