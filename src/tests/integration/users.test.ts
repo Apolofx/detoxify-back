@@ -21,8 +21,8 @@ describe("Users routes respond properly", () => {
   test("GET /users/:id returns 404 for no user found with given id", () =>
     supertest(app).get("/users/99999").expect(404));
 
-  test("GET /users/* returns 404", () =>
-    supertest(app).get("/users/anything/else").expect(404));
+  test("GET /users/:id returns 400 for invalid given id", () =>
+    supertest(app).get("/users/asd").expect(400));
 
   test("POST /users creates a new user", () =>
     supertest(app)
