@@ -1,6 +1,10 @@
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import { PrismaClient } from "@prisma/client";
+import {
+  PrismaClientKnownRequestError,
+  PrismaClientValidationError,
+} from "@prisma/client/runtime";
 const prisma = new PrismaClient();
 
 const app = express();
@@ -24,8 +28,13 @@ app.post("/users", async (req, res, next) => {
         data,
       });
       res.send(newUser);
-    } catch (e) {
-      console.log(e);
+    } catch (e: any) {
+      if (e instanceof PrismaClientValidationError)
+        return res
+          .status(400)
+          .json({ message: "Missing parameter in request body" });
+      if (e instanceof PrismaClientKnownRequestError)
+        return res.status(409).json({ message: "Email already in use" });
       next(e);
     }
   }
@@ -39,13 +48,16 @@ app.get("/users/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   const user = await prisma.user.findUnique({
     where: {
-      id: id,
+      id,
     },
   });
   if (!user) return res.sendStatus(404);
   return res.json(user);
 });
 
+app.use("/users/*", (req, res) => {
+  res.sendStatus(404);
+});
 app.use("*", (req, res) => {
   res.sendStatus(400);
 });
