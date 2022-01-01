@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import { PrismaClient } from "@prisma/client";
+import { PrismaClientValidationError } from "@prisma/client/runtime";
 const prisma = new PrismaClient();
 
 const app = express();
@@ -24,8 +25,8 @@ app.post("/users", async (req, res, next) => {
         data,
       });
       res.send(newUser);
-    } catch (e) {
-      console.log(e);
+    } catch (e: any) {
+      if (e instanceof PrismaClientValidationError) return res.sendStatus(400);
       next(e);
     }
   }
@@ -46,6 +47,9 @@ app.get("/users/:id", async (req, res) => {
   return res.json(user);
 });
 
+app.use("/users/*", (req, res) => {
+  res.sendStatus(404);
+});
 app.use("*", (req, res) => {
   res.sendStatus(400);
 });
