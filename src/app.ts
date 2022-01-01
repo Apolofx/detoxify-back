@@ -69,11 +69,7 @@ app.get("/users/:id", async (req, res) => {
   return res.json(user);
 });
 
-app.use("/users/*", (req, res) => {
-  res.sendStatus(404);
-});
 app.use("*", (req, res) => {
-  throw new Error();
   res.sendStatus(400);
 });
 
