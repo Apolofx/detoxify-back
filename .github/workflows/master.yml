@@ -32,10 +32,13 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "12.x"
-      - run: yarn
+      - name: Install dependencies
+        run: yarn
       # run the migration in the test database
-      - run: npx prisma db push
-      - run: yarn test
+      - name: Push Database schema
+        run: npx prisma db push
+      - name: Run tests
+        run: yarn test
 
   build:
     runs-on: ubuntu-latest
@@ -49,7 +52,6 @@ jobs:
 
       - name: Install Dependencies and run tests suite
         run: yarn
-      - run: yarn build
       #- run: npm tests
 
       #Run Migrations
@@ -67,5 +69,5 @@ jobs:
           heroku_app_name: "detoxify-back" #Must be unique in Heroku
           heroku_email: "nacho.conso@gmail.com"
           healthcheck: "https://detoxify-back.herokuapp.com/health"
-          delay: 5
+          delay: 10
           rollbackonhealthcheckfailed: true
