@@ -2,7 +2,7 @@ import express from "express";
 
 const health = express.Router();
 
-health.get("/health", (_req, res) => {
+health.get("/", (_req, res) => {
   const response = {
     uptime: process.uptime(),
     status: "OK",
