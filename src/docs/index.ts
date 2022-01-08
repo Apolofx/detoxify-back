@@ -1,4 +1,5 @@
 import { createUser, getUser, getUsers } from "./users.swagger";
+
 export const swaggerDocument = {
   openapi: "3.0.1",
   info: {
@@ -19,15 +20,6 @@ export const swaggerDocument = {
   servers: [
     {
       url: "http://localhost:8080/api",
-      description: "Local server",
-    },
-    {
-      url: "http://dev.detoxify/api",
-      description: "Development/testing environment server",
-    },
-    {
-      url: "http://detoxify/api",
-      description: "Production environment server",
     },
   ],
   tags: [
