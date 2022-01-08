@@ -16,7 +16,7 @@ model User {
   email        String        @unique
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-  userDetails  UserDetails[]
+  userDetails  UserDetails?
   events       Event[]
   achievements Achievement[]
   Team         Team?         @relation(fields: [teamId], references: [id])
@@ -26,14 +26,15 @@ model User {
 }
 
 model UserDetails {
-  id           Int      @id @default(autoincrement())
+  id           Int       @id @default(autoincrement())
   smokerAge    Int?
-  smokesPerDay Int
-  sports       Boolean  @default(false)
-  User         User     @relation(fields: [userId], references: [id])
-  userId       Int
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  smokesPerDay Int?
+  quitAt       DateTime? 
+  sports       Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  User         User      @relation(fields: [userId], references: [id])
+  userId       Int       @unique
 
   @@map("user_details")
 }
