@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import faker from "faker";
+import faker, { fake } from "faker";
 const prisma = new PrismaClient();
 
 async function main() {
@@ -18,6 +18,51 @@ async function main() {
       data: {
         name: faker.name.firstName(),
         email: faker.internet.email(),
+        userDetails: {
+          create: {
+            sports: true,
+            quitAt: faker.date.recent(),
+            smokerTime: faker.datatype.number({ min: 0, max: 100 }), //smoking time in years
+            smokesPerDay: faker.datatype.number({ min: 0, max: 100 }), //cigarettes per day
+            gender: faker.random.arrayElement([
+              "FEMALE",
+              "MALE",
+              "TRANSGENDER",
+              "NON_BINARY",
+            ]),
+            age: faker.datatype.number({ min: 0, max: 100 }),
+            location: faker.address.cityName(),
+          },
+        },
+        achievements: {
+          createMany: {
+            data: faker.random.arrayElements([
+              { name: "90 dias sin fumar" },
+              { name: "30 dias sin fumar" },
+              { name: "7 dias sin fumar" },
+              { name: "15 dias sin fumar" },
+              { name: "4 almuerzos ahorrados" },
+              { name: "20% más capacidad respiratoria" },
+              { name: "1 dia mas de vida" },
+              { name: "10% menos de probabilidad de tener un acv" },
+            ]),
+          },
+        },
+        events: {
+          create: {
+            type: faker.random.arrayElement([
+              "ANXIETY",
+              "PANIC_ATTACK",
+              "RELAPSE",
+              "QUIT",
+            ]),
+          },
+        },
+        userConfig: {
+          create: {
+            locale: faker.random.arrayElement(["es_ES", "en_EN"]),
+          },
+        },
       },
     });
   }
