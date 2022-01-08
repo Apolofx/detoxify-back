@@ -17,6 +17,7 @@ model User {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   userDetails  UserDetails?
+  userConfig   UserConfig?
   events       Event[]
   achievements Achievement[]
   Team         Team?         @relation(fields: [teamId], references: [id])
@@ -27,9 +28,12 @@ model User {
 
 model UserDetails {
   id           Int       @id @default(autoincrement())
-  smokerAge    Int?
+  location     String?
+  age          Int?
+  gender       Gender?
+  smokerTime   Int?
   smokesPerDay Int?
-  quitAt       DateTime? 
+  quitAt       DateTime?
   sports       Boolean   @default(false)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
@@ -40,12 +44,12 @@ model UserDetails {
 }
 
 model Event {
-  id        Int      @id @default(autoincrement())
-  type      String
-  User      User     @relation(fields: [userId], references: [id])
+  id        Int        @id @default(autoincrement())
+  type      UserEvents
+  User      User       @relation(fields: [userId], references: [id])
   userId    Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
   @@map("events")
 }
@@ -71,28 +75,33 @@ model Achievement {
   @@map("achievements")
 }
 
-// model Post {
-//   id        Int      @id @default(autoincrement())
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-//   title     String   @db.VarChar(255)
-//   content   String?
-//   published Boolean  @default(false)
-//   author    User     @relation(fields: [authorId], references: [id])
-//   authorId  Int
-// }
+model UserConfig {
+  id     Int     @id @default(autoincrement())
+  locale String? @default("en")
+  user   User    @relation(fields: [userId], references: [id])
+  userId Int     @unique
+}
 
-// model Profile {
-//   id     Int     @id @default(autoincrement())
-//   bio    String?
-//   user   User    @relation(fields: [userId], references: [id])
-//   userId Int     @unique
-// }
+model UserStats {
+  id          Int  @id @default(autoincrement())
+  moneySaved  Int? @default(0) //in user currency
+  lifeGain    Int? @default(0) //in days
+  panicEvents Int? @default(0)
+}
 
-// model User {
-//   id      Int      @id @default(autoincrement())
-//   email   String   @unique
-//   name    String?
-//   posts   Post[]
-//   profile Profile?
-// }
+enum Gender {
+  MALE
+  FEMALE
+  TRANSGENDER
+  NEUTRAL
+  NON_BINARY
+  AGENDER
+  PANGENDER
+}
+
+enum UserEvents {
+  QUIT
+  RELAPSE
+  PANIC_ATTACK
+  ANXIETY
+}
