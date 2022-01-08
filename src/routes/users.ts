@@ -50,4 +50,10 @@ users.get("/:id", async (req, res) => {
   return res.json(user);
 });
 
+//TODO add /users/:id/user_details
+
+//TODO add /users/:id/acchievements
+
+//TODO add /users/:id/events
+
 export { users };

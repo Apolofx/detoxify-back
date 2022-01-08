@@ -15,6 +15,9 @@ SentryInit(app);
 app.use(Sentry.Handlers.requestHandler());
 app.use(Sentry.Handlers.tracingHandler());
 
+//TODO add helmet
+//TODO secure routes with auth middleware
+
 app.use(ignoreFavicon);
 app.use(cors());
 app.use(express.json());
