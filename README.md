@@ -22,7 +22,7 @@
 
 ---
 
-## API
+## [API Docs](http://detoxify.ar/api-docs)
 
 ## Environments
 
