@@ -5,7 +5,7 @@ import morgan from "morgan";
 import * as Sentry from "@sentry/node";
 import { SentryInit } from "./utils/helpers";
 import { ignoreFavicon } from "./middlewares";
-import * as routes from "./routes";
+import { health, mainRouter } from "./routes";
 
 const app = express();
 
@@ -18,8 +18,8 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
-app.use("/health", routes.health);
-app.use("/users", routes.users);
+app.use("/health", health);
+app.use("/api", mainRouter);
 
 app.use("*", (req, res) => {
   res.sendStatus(400);

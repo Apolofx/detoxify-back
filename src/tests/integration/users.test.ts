@@ -16,17 +16,17 @@ describe("Users routes respond properly", () => {
   });
   let testUser: User;
   test("GET /users retrieves all users", () =>
-    supertest(app).get("/users").expect(200));
+    supertest(app).get("/api/users").expect(200));
 
   test("GET /users/:id returns 404 for no user found with given id", () =>
-    supertest(app).get("/users/99999").expect(404));
+    supertest(app).get("/api/users/99999").expect(404));
 
   test("GET /users/:id returns 400 for invalid given id", () =>
-    supertest(app).get("/users/asd").expect(400));
+    supertest(app).get("/api/users/asd").expect(400));
 
   test("POST /users creates a new user", () =>
     supertest(app)
-      .post("/users")
+      .post("/api/users")
       .send({ name: "test", email: "test@test.com" })
       .expect(200)
       .then((res) => {
@@ -37,7 +37,7 @@ describe("Users routes respond properly", () => {
 
   test("GET /users/:id retrieves a user by given id", () =>
     supertest(app)
-      .get(`/users/${testUser.id}`)
+      .get(`/api/users/${testUser.id}`)
       .expect(200)
       .then((res) => {
         expect(res.body.name).toEqual("test");
@@ -47,13 +47,13 @@ describe("Users routes respond properly", () => {
 
   test("POST /users returns 409 for already used email", () =>
     supertest(app)
-      .post("/users")
+      .post("/api/users")
       .send({ name: "test", email: "test@test.com" })
       .expect(409));
 
   test("POST /users returns 400 if missing email in request body", () =>
     supertest(app)
-      .post("/users")
+      .post("/api/users")
       .send({ name: "test" })
       .expect(400)
       .then((res) => {
@@ -62,7 +62,7 @@ describe("Users routes respond properly", () => {
 
   test("POST /users returns 400 if missing name in request body", () =>
     supertest(app)
-      .post("/users")
+      .post("/api/users")
       .send({ email: "test@test.com" })
       .expect(400)
       .then((res) => {
