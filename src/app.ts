@@ -3,8 +3,10 @@ import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import morgan from "morgan";
 import * as Sentry from "@sentry/node";
+import swaggerUi from "swagger-ui-express";
 import { SentryInit } from "./utils/helpers";
 import { ignoreFavicon } from "./middlewares";
+import { swaggerDocument } from "./docs";
 import { health, mainRouter } from "./routes";
 
 const app = express();
@@ -18,6 +20,7 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/health", health);
 app.use("/api", mainRouter);
 
