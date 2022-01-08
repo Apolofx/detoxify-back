@@ -2,7 +2,7 @@ import { app } from "../../app";
 import supertest from "supertest";
 import { PrismaClient, User } from "@prisma/client";
 
-//TODO create seeds for testing purposes
+//@todo create seeds for testing purposes
 
 describe("Users routes respond properly", () => {
   afterAll(async () => {

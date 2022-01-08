@@ -1,2 +1,2 @@
 export { ignoreFavicon } from "./ignoreFavicon";
-//TODO add data validation middlewares
+//@todo add data validation middlewares
