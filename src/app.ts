@@ -1,5 +1,4 @@
 import "./utils/helpers/sentry";
-import dotenv from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import morgan from "morgan";
@@ -9,7 +8,7 @@ import { SentryInit } from "./utils/helpers";
 import { ignoreFavicon } from "./middlewares";
 import { swaggerDocument } from "./docs";
 import { health, mainRouter } from "./routes";
-dotenv.config();
+
 const app = express();
 
 SentryInit(app);

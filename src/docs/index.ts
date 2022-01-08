@@ -1,4 +1,6 @@
 import { createUser, getUser, getUsers } from "./users.swagger";
+import { env } from "../config";
+const { PORT, ENV } = env;
 
 export const swaggerDocument = {
   openapi: "3.0.1",
@@ -19,7 +21,8 @@ export const swaggerDocument = {
   },
   servers: [
     {
-      url: "http://localhost:8080/api",
+      url: `http://localhost:${PORT}/api`,
+      description: `${ENV} server`,
     },
   ],
   tags: [
