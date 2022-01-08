@@ -1,14 +1,15 @@
 import "./utils/helpers/sentry";
+import dotenv from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import morgan from "morgan";
 import * as Sentry from "@sentry/node";
 import swaggerUi from "swagger-ui-express";
 import { SentryInit } from "./utils/helpers";
-import { ignoreFavicon, allowCrossDomain } from "./middlewares";
+import { ignoreFavicon } from "./middlewares";
 import { swaggerDocument } from "./docs";
 import { health, mainRouter } from "./routes";
-
+dotenv.config();
 const app = express();
 
 SentryInit(app);
@@ -20,12 +21,7 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
-app.use(
-  "/api-docs",
-  swaggerUi.serve,
-  allowCrossDomain,
-  swaggerUi.setup(swaggerDocument)
-);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/health", health);
 app.use("/api", mainRouter);
 
