@@ -44,3 +44,8 @@
 `GET /users/:id`
 
 `POST /users`
+
+TODO:
+
+- Add TLS certificates
+- Configure chron job to calculate user stats

@@ -4,6 +4,7 @@ import { users } from "./users";
 const mainRouter = express.Router();
 
 mainRouter.use("/users", users);
+//TODO add /teams route
 
 export { health } from "./health";
 export { mainRouter };
