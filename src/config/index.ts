@@ -6,4 +6,16 @@ const env = {
   PORT: process.env.PORT,
 };
 
+export const GENDER = [
+  "MALE",
+  "FEMALE",
+  "TRANSGENDER",
+  "NEUTRAL",
+  "NON_BINARY",
+  "AGENDER",
+  "PANGENDER",
+];
+
+export const USER_EVENTS = ["QUIT", "RELAPSE", "PANIC_ATTACK", "ANXIETY"];
+
 export { env };
