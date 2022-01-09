@@ -51,15 +51,6 @@ describe("Users routes respond properly", () => {
       .send({ name: "test", email: "test@test.com" })
       .expect(409));
 
-  test("POST /users returns 400 if missing email in request body", () =>
-    supertest(app)
-      .post("/api/users")
-      .send({ name: "test" })
-      .expect(400)
-      .then((res) => {
-        expect(res.body.message).toBeTruthy();
-      }));
-
   test("POST /users returns 400 if missing name in request body", () =>
     supertest(app)
       .post("/api/users")
