@@ -87,6 +87,22 @@ users.get("/:id/achievements", async (req, res) => {
   return res.json(user);
 });
 
+users.get("/:id/snapshot", async (req, res) => {
+  const id = parseInt(req.params.id);
+  if (!id) return res.status(400).json({ message: "Invalid user id value" });
+  const user = await prisma.user.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      achievements: true,
+      userDetails: true,
+      userConfig: true,
+    },
+  });
+  return res.json(user);
+});
+
 /**
  * @todo add /users/:id/events
  */
