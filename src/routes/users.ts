@@ -87,10 +87,7 @@ users.get("/:id/achievements", async (req, res) => {
   return res.json(user);
 });
 
-//@todo add /users/:id/user_details
-
-//@todo add /users/:id/acchievements
-
-//@todo add /users/:id/events
-
+/**
+ * @todo add /users/:id/events
+ */
 export { users };

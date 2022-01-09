@@ -68,4 +68,22 @@ describe("Users routes respond properly", () => {
       .then((res) => {
         expect(res.body.message).toBeTruthy();
       }));
+  test("GET /users/:id/details retrieves a single user with its details", () => {
+    supertest(app)
+      .get(`/api/users/${testUser.id}/details`)
+      .expect(200)
+      .then((res) => {
+        expect(Object.keys(res.body)).toContain("userDetails");
+        expect(typeof res.body.userDetails).toEqual("object");
+      });
+  });
+  test("GET /users/:id/achievements retrieves a single user with its details", () => {
+    supertest(app)
+      .get(`/api/users/${testUser.id}/achievements`)
+      .expect(200)
+      .then((res) => {
+        expect(Object.keys(res.body)).toContain("achievements");
+        expect(typeof res.body.achievements).toEqual("object");
+      });
+  });
 });
