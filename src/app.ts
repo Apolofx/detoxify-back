@@ -7,7 +7,7 @@ import swaggerUi from "swagger-ui-express";
 import { SentryInit, LocalStrategy } from "./utils/helpers";
 import { ignoreFavicon } from "./middlewares";
 import { swaggerDocument } from "./docs";
-import { health, mainRouter, pagesRouter, authRouter } from "./routes";
+import { health, mainRouter, authRouter } from "./routes";
 import passport from "passport";
 
 const app = express();
@@ -24,12 +24,11 @@ app.use(ignoreFavicon);
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(express.static(__dirname + "/public"));
+app.use(express.static("./src/public"));
 app.use(passport.initialize());
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/health", health);
-app.use("/pages", pagesRouter);
 app.use("/auth", authRouter);
 app.use("/api", mainRouter);
 
