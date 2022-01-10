@@ -12,7 +12,7 @@ const prisma = new PrismaClient();
 //TODO add tests to auth routes
 //TODO review auth logic. Its weird, a user can be created without email and password but login requires login and password
 
-auth.post("/login", parseEmailAsUsername, useEmailAuthentication);
+auth.post("/login", useEmailAuthentication);
 
 auth.post("/register", async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -38,11 +38,6 @@ auth.post("/register", async (req, res, next) => {
 export { auth };
 
 //middlewares
-function parseEmailAsUsername(req: Request, res: Response, next: NextFunction) {
-  req.body.username = req.body.email;
-  next();
-}
-
 function useEmailAuthentication(
   req: Request,
   res: Response,
