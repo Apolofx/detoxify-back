@@ -13,7 +13,8 @@ datasource db {
 model User {
   id           Int           @id @default(autoincrement())
   name         String
-  email        String        @unique
+  email        String?       @unique
+  password     String?
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   userDetails  UserDetails?
@@ -37,7 +38,7 @@ model UserDetails {
   sports       Boolean   @default(false)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
-  User         User      @relation(fields: [userId], references: [id])
+  User         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       Int       @unique
 
   @@map("user_details")
@@ -46,7 +47,7 @@ model UserDetails {
 model Event {
   id        Int        @id @default(autoincrement())
   type      UserEvents
-  User      User       @relation(fields: [userId], references: [id])
+  User      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
@@ -67,7 +68,7 @@ model Team {
 model Achievement {
   id        Int      @id @default(autoincrement())
   name      String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -78,7 +79,7 @@ model Achievement {
 model UserConfig {
   id     Int     @id @default(autoincrement())
   locale String? @default("en")
-  user   User    @relation(fields: [userId], references: [id])
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int     @unique
 }
 

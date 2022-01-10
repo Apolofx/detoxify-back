@@ -51,15 +51,6 @@ describe("Users routes respond properly", () => {
       .send({ name: "test", email: "test@test.com" })
       .expect(409));
 
-  test("POST /users returns 400 if missing email in request body", () =>
-    supertest(app)
-      .post("/api/users")
-      .send({ name: "test" })
-      .expect(400)
-      .then((res) => {
-        expect(res.body.message).toBeTruthy();
-      }));
-
   test("POST /users returns 400 if missing name in request body", () =>
     supertest(app)
       .post("/api/users")
@@ -68,4 +59,22 @@ describe("Users routes respond properly", () => {
       .then((res) => {
         expect(res.body.message).toBeTruthy();
       }));
+  test("GET /users/:id/details retrieves a single user with its details", () => {
+    supertest(app)
+      .get(`/api/users/${testUser.id}/details`)
+      .expect(200)
+      .then((res) => {
+        expect(Object.keys(res.body)).toContain("userDetails");
+        expect(typeof res.body.userDetails).toEqual("object");
+      });
+  });
+  test("GET /users/:id/achievements retrieves a single user with its details", () => {
+    supertest(app)
+      .get(`/api/users/${testUser.id}/achievements`)
+      .expect(200)
+      .then((res) => {
+        expect(Object.keys(res.body)).toContain("achievements");
+        expect(typeof res.body.achievements).toEqual("object");
+      });
+  });
 });

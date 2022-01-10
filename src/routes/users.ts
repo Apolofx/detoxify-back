@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User, UserDetails } from "@prisma/client";
 import {
   PrismaClientKnownRequestError,
   PrismaClientValidationError,
@@ -20,10 +20,19 @@ users.get("/", async (_req: Request, res: Response, next: NextFunction) => {
 
 users.post("/", async (req, res, next) => {
   const { body: data } = req;
+  const { name, email, ...userDetails }: User & UserDetails = data;
   if (data) {
     try {
       const newUser = await prisma.user.create({
-        data,
+        data: {
+          name,
+          email,
+          userDetails: {
+            create: {
+              ...userDetails,
+            },
+          },
+        },
       });
       res.send(newUser);
     } catch (e: any) {
@@ -50,10 +59,51 @@ users.get("/:id", async (req, res) => {
   return res.json(user);
 });
 
-//@todo add /users/:id/user_details
+users.get("/:id/details", async (req, res) => {
+  const id = parseInt(req.params.id);
+  if (!id) return res.status(400).json({ message: "Invalid user id value" });
+  const user = await prisma.user.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      userDetails: true,
+    },
+  });
+  return res.json(user);
+});
 
-//@todo add /users/:id/acchievements
+users.get("/:id/achievements", async (req, res) => {
+  const id = parseInt(req.params.id);
+  if (!id) return res.status(400).json({ message: "Invalid user id value" });
+  const user = await prisma.user.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      achievements: true,
+    },
+  });
+  return res.json(user);
+});
 
-//@todo add /users/:id/events
+users.get("/:id/snapshot", async (req, res) => {
+  const id = parseInt(req.params.id);
+  if (!id) return res.status(400).json({ message: "Invalid user id value" });
+  const user = await prisma.user.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      achievements: true,
+      userDetails: true,
+      userConfig: true,
+    },
+  });
+  return res.json(user);
+});
 
+/**
+ * @todo add /users/:id/events
+ */
 export { users };
