@@ -21,7 +21,7 @@ const LocalStrategy = new Local.Strategy(
       const passwordMatches = await bcrypt.compare(password, user.password);
       if (!passwordMatches)
         return done(null, false, { message: "Wrong password" });
-      return done(null, user);
+      return done(null, user.id);
     } catch (e: any) {
       console.error(e.message);
       done(e);
