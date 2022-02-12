@@ -18,6 +18,8 @@ users.get("/", async (_req: Request, res: Response, next: NextFunction) => {
   }
 });
 
+//TODO review --> an already registered and authenticated user can create more users
+
 users.post("/", async (req, res, next) => {
   const { body: data } = req;
   const { name, email, ...userDetails }: User & UserDetails = data;

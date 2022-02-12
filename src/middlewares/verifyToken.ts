@@ -17,7 +17,6 @@ export const verifyToken = (
   try {
     const token = extractToken(req.headers);
     jwt.verify(token, env.JWT_SECRET, (err, payload) => {
-      console.log(payload);
       if (err) res.sendStatus(401);
       req.authInfo = payload;
       next();
