@@ -22,13 +22,14 @@ users.get("/", async (_req: Request, res: Response, next: NextFunction) => {
 
 users.post("/", async (req, res, next) => {
   const { body: data } = req;
-  const { name, email, ...userDetails }: User & UserDetails = data;
+  const { name, email, password, ...userDetails }: User & UserDetails = data;
   if (data) {
     try {
       const newUser = await prisma.user.create({
         data: {
           name,
           email,
+          password,
           userDetails: {
             create: {
               ...userDetails,

@@ -57,10 +57,10 @@ describe("GET /users/:id", () => {
 });
 
 describe("POST /users", () => {
-  test("POST /users creates a new user creates new user if authenticated", () =>
+  test("POST /users creates a new user if authenticated", () =>
     request(app)
       .post("/api/users")
-      .send({ name: "test", email: "test@test.com" })
+      .send({ name: "test", email: "test@test.com", password: "test" })
       .set({ authorization: `Bearer ${token}` })
       .expect(200)
       .then((res) => {
@@ -72,7 +72,7 @@ describe("POST /users", () => {
   test("POST /users returns 401 if not authenticated", () =>
     request(app)
       .post("/api/users")
-      .send({ name: "test", email: "test@test.com" })
+      .send({ name: "test", email: "test@test.com", password: "test" })
       .expect(401));
 });
 
@@ -90,7 +90,7 @@ test("GET /users/:id retrieves a user by given id", () =>
 test("POST /users returns 409 for already used email", () =>
   request(app)
     .post("/api/users")
-    .send({ name: "test", email: "test@test.com" })
+    .send({ name: "test", email: "test@test.com", password: "test" })
     .set({ authorization: `Bearer ${token}` })
     .expect(409));
 
