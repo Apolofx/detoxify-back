@@ -1,13 +1,12 @@
 import express from "express";
 import jwt from "jsonwebtoken";
-import { PrismaClient } from "@prisma/client";
+import prisma from "@database";
 import bcrypt from "bcryptjs";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
-import { useEmailAuthentication } from "../middlewares";
-import { env } from "../config";
+import { useEmailAuthentication } from "@middlewares";
+import { env } from "@config";
 
 const auth = express.Router();
-const prisma = new PrismaClient();
 
 //TODO delegate business logic to controllers
 //TODO add tests to auth routes

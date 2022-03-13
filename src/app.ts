@@ -4,12 +4,13 @@ import cors from "cors";
 import morgan from "morgan";
 import * as Sentry from "@sentry/node";
 import swaggerUi from "swagger-ui-express";
-import { SentryInit, LocalStrategy } from "./utils/helpers";
+import { helpers } from "@utils";
 import { ignoreFavicon } from "./middlewares";
 import { swaggerDocument } from "./docs";
 import { health, mainRouter, authRouter } from "./routes";
 import passport from "passport";
 
+const { LocalStrategy, SentryInit } = helpers;
 const app = express();
 
 SentryInit(app);
