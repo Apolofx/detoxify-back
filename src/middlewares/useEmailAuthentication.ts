@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import passport from "passport";
 import jwt from "jsonwebtoken";
-import { env } from "../config";
+import { env } from "@config";
 
 export function useEmailAuthentication(
   req: Request,

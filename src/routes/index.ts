@@ -1,5 +1,5 @@
 import express from "express";
-import { verifyToken } from "../middlewares";
+import { verifyToken } from "@middlewares";
 import { users } from "./users";
 import { auth } from "./auth";
 

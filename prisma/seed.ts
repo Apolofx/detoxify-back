@@ -18,6 +18,7 @@ async function main() {
       data: {
         name: faker.name.firstName(),
         email: faker.internet.email(),
+        password: faker.internet.password(),
         userDetails: {
           create: {
             sports: true,

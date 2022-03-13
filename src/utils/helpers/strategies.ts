@@ -1,8 +1,7 @@
 import Local from "passport-local";
-import { PrismaClient } from "@prisma/client";
+import prisma from "@database";
 import bcrypt from "bcryptjs";
 
-const prisma = new PrismaClient();
 //TODO review if this mixed logic es OK
 const LocalStrategy = new Local.Strategy(
   { usernameField: "email", passwordField: "password" },

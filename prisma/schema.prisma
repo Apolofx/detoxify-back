@@ -12,9 +12,9 @@ datasource db {
 
 model User {
   id           Int           @id @default(autoincrement())
-  name         String
-  email        String?       @unique
-  password     String?
+  email        String        @unique
+  password     String
+  name         String?
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   userDetails  UserDetails?
@@ -81,6 +81,8 @@ model UserConfig {
   locale String? @default("en")
   user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int     @unique
+
+  @@map("users_config")
 }
 
 model UserStats {
@@ -88,6 +90,8 @@ model UserStats {
   moneySaved  Int? @default(0) //in user currency
   lifeGain    Int? @default(0) //in days
   panicEvents Int? @default(0)
+
+  @@map("users_stats")
 }
 
 enum Gender {
