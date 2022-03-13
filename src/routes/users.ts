@@ -1,18 +1,23 @@
 import express, { NextFunction, Request, Response } from "express";
-import { PrismaClient, User, UserDetails } from "@prisma/client";
+import { User, UserDetails } from "@prisma/client";
 import {
   PrismaClientKnownRequestError,
   PrismaClientValidationError,
 } from "@prisma/client/runtime";
+import prisma from "@database";
+import { helpers } from "@utils";
+
 const users = express.Router();
-const prisma = new PrismaClient();
 
 // /api/users
 users.get("/", async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const users = await prisma.user.findMany();
+    const usersWithoutPassword = users.map((user) =>
+      helpers.exclude(user, "password")
+    );
     if (!users) return res.status(304);
-    return res.json(users);
+    return res.json(usersWithoutPassword);
   } catch (e) {
     next(e);
   }
@@ -20,6 +25,7 @@ users.get("/", async (_req: Request, res: Response, next: NextFunction) => {
 
 //TODO review --> an already registered and authenticated user can create more users
 
+// Get All Users
 users.post("/", async (req, res, next) => {
   const { body: data } = req;
   const { name, email, password, ...userDetails }: User & UserDetails = data;
@@ -50,6 +56,7 @@ users.post("/", async (req, res, next) => {
   }
 });
 
+//Get User by ID
 users.get("/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   if (!id) return res.status(400).json({ message: "Invalid user id value" });
@@ -59,9 +66,11 @@ users.get("/:id", async (req, res) => {
     },
   });
   if (!user) return res.sendStatus(404);
-  return res.json(user);
+  const userWithoutPassword = helpers.exclude(user, "password");
+  return res.json(userWithoutPassword);
 });
 
+//Get user details by userID
 users.get("/:id/details", async (req, res) => {
   const id = parseInt(req.params.id);
   if (!id) return res.status(400).json({ message: "Invalid user id value" });
@@ -73,9 +82,11 @@ users.get("/:id/details", async (req, res) => {
       userDetails: true,
     },
   });
-  return res.json(user);
+  const userWithoutPassword = helpers.exclude(user as User, "password"); // forcing type User
+  return res.json(userWithoutPassword);
 });
 
+//Get user achievements by userID
 users.get("/:id/achievements", async (req, res) => {
   const id = parseInt(req.params.id);
   if (!id) return res.status(400).json({ message: "Invalid user id value" });
@@ -87,9 +98,11 @@ users.get("/:id/achievements", async (req, res) => {
       achievements: true,
     },
   });
-  return res.json(user);
+  const userWithoutPassword = helpers.exclude(user as User, "password");
+  return res.json(userWithoutPassword);
 });
 
+//Get user snapshot (user and its related entities)
 users.get("/:id/snapshot", async (req, res) => {
   const id = parseInt(req.params.id);
   if (!id) return res.status(400).json({ message: "Invalid user id value" });
@@ -103,7 +116,27 @@ users.get("/:id/snapshot", async (req, res) => {
       userConfig: true,
     },
   });
-  return res.json(user);
+  const userWithoutPassword = helpers.exclude(user as User, "password");
+  return res.json(userWithoutPassword);
+});
+
+//Update User by ID
+users.put("/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  const body = req.body;
+  if (!Object.keys(body).length) return res.sendStatus(304);
+  try {
+    const updatedUser = await prisma.user.update({
+      data: { ...body },
+      where: {
+        id,
+      },
+    });
+    return res.json(updatedUser);
+  } catch (e: any) {
+    if (e.code === "P2025") return res.sendStatus(404);
+    return res.sendStatus(500);
+  }
 });
 
 /**
