@@ -15,6 +15,7 @@ model User {
   email        String        @unique
   password     String
   name         String?
+  role         UserRole      @default(REGULAR)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   userDetails  UserDetails?
@@ -109,4 +110,9 @@ enum UserEvents {
   RELAPSE
   PANIC_ATTACK
   ANXIETY
+}
+
+enum UserRole {
+  ADMIN
+  REGULAR
 }
