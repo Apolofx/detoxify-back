@@ -6,27 +6,33 @@ import {
 } from "@prisma/client/runtime";
 import prisma from "@database";
 import { helpers } from "@utils";
+import { verifyRole } from "@middlewares";
 
 const users = express.Router();
 
 // /api/users
-users.get("/", async (_req: Request, res: Response, next: NextFunction) => {
-  try {
-    const users = await prisma.user.findMany();
-    const usersWithoutPassword = users.map((user) =>
-      helpers.exclude(user, "password")
-    );
-    if (!users) return res.status(304);
-    return res.json(usersWithoutPassword);
-  } catch (e) {
-    next(e);
+users.get(
+  "/",
+  verifyRole("ADMIN"),
+  async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+      const users = await prisma.user.findMany();
+      const usersWithoutPassword = users.map((user) =>
+        helpers.exclude(user, "password")
+      );
+      if (!users) return res.status(304);
+      return res.json(usersWithoutPassword);
+    } catch (e) {
+      next(e);
+    }
   }
-});
+);
 
 //TODO review --> an already registered and authenticated user can create more users
 
 // Get All Users
-users.post("/", async (req, res, next) => {
+
+users.post("/", verifyRole("ADMIN"), async (req, res, next) => {
   const { body: data } = req;
   const { name, email, password, ...userDetails }: User & UserDetails = data;
   if (data) {
@@ -57,7 +63,7 @@ users.post("/", async (req, res, next) => {
 });
 
 //Get User by ID
-users.get("/:id", async (req, res) => {
+users.get("/:id", verifyRole("REGULAR"), async (req, res) => {
   const id = parseInt(req.params.id);
   if (!id) return res.status(400).json({ message: "Invalid user id value" });
   const user = await prisma.user.findUnique({
@@ -71,7 +77,7 @@ users.get("/:id", async (req, res) => {
 });
 
 //Get user details by userID
-users.get("/:id/details", async (req, res) => {
+users.get("/:id/details", verifyRole("REGULAR"), async (req, res) => {
   const id = parseInt(req.params.id);
   if (!id) return res.status(400).json({ message: "Invalid user id value" });
   const user = await prisma.user.findUnique({
@@ -87,7 +93,7 @@ users.get("/:id/details", async (req, res) => {
 });
 
 //Get user achievements by userID
-users.get("/:id/achievements", async (req, res) => {
+users.get("/:id/achievements", verifyRole("REGULAR"), async (req, res) => {
   const id = parseInt(req.params.id);
   if (!id) return res.status(400).json({ message: "Invalid user id value" });
   const user = await prisma.user.findUnique({
@@ -121,7 +127,7 @@ users.get("/:id/snapshot", async (req, res) => {
 });
 
 //Update User by ID
-users.put("/:id", async (req, res) => {
+users.put("/:id", verifyRole("REGULAR"), async (req, res) => {
   const id = parseInt(req.params.id);
   const body = req.body;
   if (!Object.keys(body).length) return res.sendStatus(304);
