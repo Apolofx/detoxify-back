@@ -1,4 +1,4 @@
-name: Node.js CI-CD
+name: CI-CD PROD
 
 on:
   push:

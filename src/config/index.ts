@@ -19,4 +19,14 @@ export const GENDER = [
 
 export const USER_EVENTS = ["QUIT", "RELAPSE", "PANIC_ATTACK", "ANXIETY"];
 
+export const USER_ROLE_LEVELS = Object.freeze({
+  ADMIN: 1,
+  REGULAR: 0,
+});
+
+export const USER_ROLE_NAMES = Object.freeze({
+  ADMIN: "ADMIN",
+  REGULAR: "REGULAR",
+});
+
 export { env };

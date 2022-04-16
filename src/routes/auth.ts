@@ -4,7 +4,7 @@ import prisma from "@database";
 import bcrypt from "bcryptjs";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { useEmailAuthentication } from "@middlewares";
-import { env } from "@config";
+import { env, USER_ROLE_NAMES } from "@config";
 
 const auth = express.Router();
 
@@ -19,15 +19,19 @@ auth.post("/register", async (req, res, next) => {
   var salt = bcrypt.genSaltSync(10);
   var hash = bcrypt.hashSync(password, salt);
   try {
-    const { id } = await prisma.user.create({
+    const { id, role = USER_ROLE_NAMES.REGULAR } = await prisma.user.create({
       data: {
         name,
         email,
         password: hash,
       },
     });
+    const jwtPayload = {
+      id,
+      role,
+    };
     return res.json({
-      token: jwt.sign(id.toString(), env.JWT_SECRET),
+      token: jwt.sign(jwtPayload, env.JWT_SECRET),
     });
   } catch (e) {
     if (e instanceof PrismaClientKnownRequestError)
