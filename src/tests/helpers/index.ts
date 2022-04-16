@@ -19,11 +19,15 @@ export class TestUserFactory {
 
   async CreateAdmin(): Promise<TestUser> {
     let testUserAdmin: TestUser;
-    await prismaTest.user.delete({
-      where: {
-        email: "admin_test_user@test.com",
-      },
-    });
+    try {
+      await prismaTest.user.delete({
+        where: {
+          email: "admin_test_user@test.com",
+        },
+      });
+    } catch (e: any) {
+      if (e.code === "P2025") console.log("No users found to delete");
+    }
     //create new authenticated admin user and login
     const admin = await request(this.appInstance).post("/auth/register").send({
       name: "admin_test_user",
@@ -58,11 +62,15 @@ export class TestUserFactory {
 
   async CreateRegular(): Promise<TestUser> {
     let testUserRegular: TestUser;
-    await prismaTest.user.delete({
-      where: {
-        email: "regular_test_user@test.com",
-      },
-    });
+    try {
+      await prismaTest.user.delete({
+        where: {
+          email: "regular_test_user@test.com",
+        },
+      });
+    } catch (e: any) {
+      if (e.code === "P2025") console.log("No users found to delete");
+    }
     //create new authenticated regular user
     const regular = await request(this.appInstance)
       .post("/auth/register")
