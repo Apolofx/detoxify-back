@@ -1,4 +1,4 @@
-name: Node.js CI-CD dev
+name: CI-CD DEV
 
 on:
   push:
