@@ -14,7 +14,8 @@ interface Options {
 }
 
 /**
- *
+ * Adds role and user level security to routes. By default, role REGULAR
+ * only has access to resources belonging to the user requesting it.
  * @param required_role minimum required role to access this resource
  * @param options
  * @returns Express Middleware

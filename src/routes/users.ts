@@ -28,10 +28,6 @@ users.get(
   }
 );
 
-//TODO review --> an already registered and authenticated user can create more users
-
-// Get All Users
-
 users.post("/", verifyRole("ADMIN"), async (req, res, next) => {
   const { body: data } = req;
   const { name, email, password, ...userDetails }: User & UserDetails = data;
@@ -49,7 +45,7 @@ users.post("/", verifyRole("ADMIN"), async (req, res, next) => {
           },
         },
       });
-      res.send(newUser);
+      res.status(201).json(newUser);
     } catch (e: any) {
       if (e instanceof PrismaClientValidationError)
         return res
@@ -60,6 +56,7 @@ users.post("/", verifyRole("ADMIN"), async (req, res, next) => {
       next(e);
     }
   }
+  return res.sendStatus(204);
 });
 
 //Get User by ID
