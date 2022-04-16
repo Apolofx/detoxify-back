@@ -55,8 +55,9 @@ users.post("/", verifyRole("ADMIN"), async (req, res, next) => {
         return res.status(409).json({ message: "Email already in use" });
       next(e);
     }
+  } else {
+    res.sendStatus(204);
   }
-  return res.sendStatus(204);
 });
 
 //Get User by ID
