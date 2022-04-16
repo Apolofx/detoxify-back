@@ -67,7 +67,7 @@ describe("POST /users", () => {
       .post("/api/users")
       .send({ name: testName, email: testEmail, password: "test" })
       .set({ authorization: `Bearer ${testUserAdmin.token}` })
-      .expect(200)
+      .expect(201)
       .then((res) => {
         expect(res.body.name).toEqual(testName);
         expect(res.body.email).toEqual(testEmail);

@@ -14,7 +14,8 @@ interface Options {
 }
 
 /**
- *
+ * Adds role and user level security to routes. By default, role REGULAR
+ * only has access to resources belonging to the user requesting it.
  * @param required_role minimum required role to access this resource
  * @param options
  * @returns Express Middleware
@@ -33,7 +34,7 @@ function verifyRole(
     //if required_role does not complies with requests minimum role permission return forbidden
     if (USER_ROLE_LEVELS[authInfo.role] < USER_ROLE_LEVELS[required_role])
       return res.sendStatus(403);
-    //if the queried id does not match the client agent id return forbidden
+    //if the queried id does not match the user's id return forbidden
     if (
       authInfo.role === USER_ROLE_NAMES.REGULAR &&
       use_id_level_security &&

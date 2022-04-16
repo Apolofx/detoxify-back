@@ -28,10 +28,6 @@ users.get(
   }
 );
 
-//TODO review --> an already registered and authenticated user can create more users
-
-// Get All Users
-
 users.post("/", verifyRole("ADMIN"), async (req, res, next) => {
   const { body: data } = req;
   const { name, email, password, ...userDetails }: User & UserDetails = data;
@@ -49,7 +45,7 @@ users.post("/", verifyRole("ADMIN"), async (req, res, next) => {
           },
         },
       });
-      res.send(newUser);
+      res.status(201).json(newUser);
     } catch (e: any) {
       if (e instanceof PrismaClientValidationError)
         return res
@@ -59,75 +55,97 @@ users.post("/", verifyRole("ADMIN"), async (req, res, next) => {
         return res.status(409).json({ message: "Email already in use" });
       next(e);
     }
+  } else {
+    res.sendStatus(204);
   }
 });
 
 //Get User by ID
-users.get("/:id", verifyRole("REGULAR"), async (req, res) => {
+users.get("/:id", verifyRole("REGULAR"), async (req, res, next) => {
   const id = parseInt(req.params.id);
   if (!id) return res.status(400).json({ message: "Invalid user id value" });
-  const user = await prisma.user.findUnique({
-    where: {
-      id,
-    },
-  });
-  if (!user) return res.sendStatus(404);
-  const userWithoutPassword = helpers.exclude(user, "password");
-  return res.json(userWithoutPassword);
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!user) return res.sendStatus(404);
+    const userWithoutPassword = helpers.exclude(user, "password");
+    return res.json(userWithoutPassword);
+  } catch (e) {
+    next(e);
+  }
 });
 
 //Get user details by userID
-users.get("/:id/details", verifyRole("REGULAR"), async (req, res) => {
+users.get("/:id/details", verifyRole("REGULAR"), async (req, res, next) => {
   const id = parseInt(req.params.id);
   if (!id) return res.status(400).json({ message: "Invalid user id value" });
-  const user = await prisma.user.findUnique({
-    where: {
-      id,
-    },
-    include: {
-      userDetails: true,
-    },
-  });
-  const userWithoutPassword = helpers.exclude(user as User, "password"); // forcing type User
-  return res.json(userWithoutPassword);
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        userDetails: true,
+      },
+    });
+    const userWithoutPassword = helpers.exclude(user as User, "password"); // forcing type User
+    return res.json(userWithoutPassword);
+  } catch (e) {
+    next(e);
+  }
 });
 
 //Get user achievements by userID
-users.get("/:id/achievements", verifyRole("REGULAR"), async (req, res) => {
-  const id = parseInt(req.params.id);
-  if (!id) return res.status(400).json({ message: "Invalid user id value" });
-  const user = await prisma.user.findUnique({
-    where: {
-      id,
-    },
-    include: {
-      achievements: true,
-    },
-  });
-  const userWithoutPassword = helpers.exclude(user as User, "password");
-  return res.json(userWithoutPassword);
-});
+users.get(
+  "/:id/achievements",
+  verifyRole("REGULAR"),
+  async (req, res, next) => {
+    const id = parseInt(req.params.id);
+    if (!id) return res.status(400).json({ message: "Invalid user id value" });
+    try {
+      const user = await prisma.user.findUnique({
+        where: {
+          id,
+        },
+        include: {
+          achievements: true,
+        },
+      });
+      const userWithoutPassword = helpers.exclude(user as User, "password");
+      return res.json(userWithoutPassword);
+    } catch (e) {
+      next(e);
+    }
+  }
+);
 
 //Get user snapshot (user and its related entities)
-users.get("/:id/snapshot", async (req, res) => {
+users.get("/:id/snapshot", verifyRole("REGULAR"), async (req, res, next) => {
   const id = parseInt(req.params.id);
   if (!id) return res.status(400).json({ message: "Invalid user id value" });
-  const user = await prisma.user.findUnique({
-    where: {
-      id,
-    },
-    include: {
-      achievements: true,
-      userDetails: true,
-      userConfig: true,
-    },
-  });
-  const userWithoutPassword = helpers.exclude(user as User, "password");
-  return res.json(userWithoutPassword);
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        achievements: true,
+        userDetails: true,
+        userConfig: true,
+      },
+    });
+    const userWithoutPassword = helpers.exclude(user as User, "password");
+    return res.json(userWithoutPassword);
+  } catch (e) {
+    next(e);
+  }
 });
 
 //Update User by ID
-users.put("/:id", verifyRole("REGULAR"), async (req, res) => {
+users.put("/:id", verifyRole("REGULAR"), async (req, res, next) => {
   const id = parseInt(req.params.id);
   const body = req.body;
   if (!Object.keys(body).length) return res.sendStatus(304);
@@ -141,7 +159,7 @@ users.put("/:id", verifyRole("REGULAR"), async (req, res) => {
     return res.json(updatedUser);
   } catch (e: any) {
     if (e.code === "P2025") return res.sendStatus(404);
-    return res.sendStatus(500);
+    next(e);
   }
 });
 
