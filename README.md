@@ -26,7 +26,7 @@
 
 ---
 
-## [API Docs](http://detoxify.ar/api-docs)
+## [API Docs - (swagger)](http://detoxify.ar/api-docs)
 
 ## Environments
 
