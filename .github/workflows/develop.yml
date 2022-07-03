@@ -34,7 +34,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: "12.x"
+          node-version: "16.x"
       - name: Install dependencies
         run: yarn
       # run the migration in the test database
@@ -51,7 +51,7 @@ jobs:
       - name: Use Node 12
         uses: actions/setup-node@v1
         with:
-          node-version: "12.x"
+          node-version: "16.x"
       - name: Install Dependencies and run tests suite
         run: yarn
       # - run: yarn test
