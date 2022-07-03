@@ -15,6 +15,10 @@
 
 1. For any changes made on `prisma.schema`, remember to run `npx prisma migrate dev` locally in order to generate new prisma client and update migrations SQL scripts.
 
+## ERD
+
+![ERD](src/docs/erd.png)
+
 ## Test
 
 - Run all tests once, with coverage results 👉 `npm run test`
@@ -22,7 +26,7 @@
 
 ---
 
-## [API Docs](http://detoxify.ar/api-docs)
+## [API Docs - (swagger)](http://detoxify.ar/api-docs)
 
 ## Environments
 
@@ -39,11 +43,29 @@
 
 ### Users
 
+All routes need `Authorization` header with a valid bearer token provided to the user making the request.
+
 `GET /users`
 
 `GET /users/:id`
 
+`GET /users/:id/details`
+
+`GET /users/:id/achievements`
+
+`GET /users/:id/snapshot`
+
+`PUT /users/:id`
+
 `POST /users`
+
+### Auth
+
+`POST /auth/login`
+
+`POST /auth/register`
+
+---
 
 TODO:
 

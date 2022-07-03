@@ -1,4 +1,13 @@
-import { createUser, getUser, getUsers } from "./users.swagger";
+import {
+  createUser,
+  getUser,
+  getUserAchievements,
+  getUserDetails,
+  getUsers,
+  getUserSnapshot,
+  login,
+  register,
+} from "./users.swagger";
 import { env } from "../config";
 const { PORT, ENV } = env;
 
@@ -38,8 +47,31 @@ export const swaggerDocument = {
     "/users/{userId}": {
       get: getUser,
     },
+    "/users/{userId}/details": {
+      get: getUserDetails,
+    },
+    "/users/{userId}/achievements": {
+      get: getUserAchievements,
+    },
+    "/users/{userId}/snapshot": {
+      get: getUserSnapshot,
+    },
+    "/auth/login": {
+      post: login,
+    },
+    "/auth/register": {
+      post: register,
+    },
   },
   components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: "http",
+        scheme: "bearer",
+        beaererFormat: "JWT",
+        in: "header",
+      },
+    },
     schemas: {
       ArrayOfUsers: {
         type: "array",
@@ -52,12 +84,17 @@ export const swaggerDocument = {
         properties: {
           id: {
             type: "integer",
-            format: "int32",
+          },
+          email: {
+            type: "string",
           },
           name: {
             type: "string",
           },
-          email: {
+          role: {
+            type: "string",
+          },
+          notificationToken: {
             type: "string",
           },
           createdAt: {
@@ -69,6 +106,226 @@ export const swaggerDocument = {
           teamId: {
             type: "integer",
             format: "nullable",
+          },
+        },
+      },
+      UserDetails: {
+        type: "object",
+        properties: {
+          id: {
+            type: "integer",
+          },
+          email: {
+            type: "string",
+          },
+          name: {
+            type: "string",
+          },
+          role: {
+            type: "string",
+          },
+          notificationToken: {
+            type: "string",
+          },
+          createdAt: {
+            type: "string",
+          },
+          updatedAt: {
+            type: "string",
+          },
+          teamId: {
+            type: "integer",
+            format: "nullable",
+          },
+          userDetails: {
+            type: "object",
+            properties: {
+              id: {
+                type: "integer",
+              },
+              location: {
+                type: "string",
+              },
+              age: {
+                type: "integer",
+              },
+              gender: {
+                type: "string",
+              },
+              smokerTime: {
+                type: "integer",
+              },
+              smokesPerDay: {
+                type: "integer",
+              },
+              quitAt: {
+                type: "string",
+              },
+              sports: {
+                type: "boolean",
+              },
+              createdAt: {
+                type: "string",
+              },
+              updatedAt: {
+                type: "string",
+              },
+              userId: {
+                type: "integer",
+              },
+            },
+          },
+        },
+        required: [],
+      },
+      UserAchievements: {
+        type: "object",
+        properties: {
+          id: {
+            type: "integer",
+          },
+          email: {
+            type: "string",
+          },
+          name: {
+            type: "string",
+          },
+          role: {
+            type: "string",
+          },
+          notificationToken: {
+            type: "string",
+          },
+          createdAt: {
+            type: "string",
+          },
+          updatedAt: {
+            type: "string",
+          },
+          teamId: {
+            type: "integer",
+          },
+          achievements: {
+            type: "array",
+            items: {
+              $ref: "#/components/schemas/Achievement",
+            },
+          },
+        },
+      },
+      UserSnapshot: {
+        type: "object",
+        properties: {
+          id: {
+            type: "integer",
+          },
+          email: {
+            type: "string",
+          },
+          name: {
+            type: "string",
+          },
+          role: {
+            type: "string",
+          },
+          notificationToken: {
+            type: "string",
+          },
+          createdAt: {
+            type: "string",
+          },
+          updatedAt: {
+            type: "string",
+          },
+          teamId: {
+            type: "integer",
+          },
+          achievements: {
+            type: "array",
+            items: {
+              $ref: "#/components/schemas/Achievement",
+            },
+          },
+          userDetails: {
+            type: "object",
+            properties: {
+              id: {
+                type: "integer",
+              },
+              location: {
+                type: "string",
+              },
+              age: {
+                type: "integer",
+              },
+              gender: {
+                type: "string",
+              },
+              smokerTime: {
+                type: "integer",
+              },
+              smokesPerDay: {
+                type: "integer",
+              },
+              quitAt: {
+                type: "string",
+              },
+              sports: {
+                type: "boolean",
+              },
+              createdAt: {
+                type: "string",
+              },
+              updatedAt: {
+                type: "string",
+              },
+              userId: {
+                type: "integer",
+              },
+            },
+          },
+          userConfig: {
+            type: "object",
+            properties: {
+              id: {
+                type: "integer",
+              },
+              locale: {
+                type: "string",
+              },
+              userId: {
+                type: "integer",
+              },
+            },
+          },
+        },
+      },
+      Achievement: {
+        type: "object",
+        properties: {
+          id: {
+            type: "integer",
+          },
+          name: {
+            type: "string",
+          },
+          userId: {
+            type: "integer",
+          },
+          createdAt: {
+            type: "string",
+          },
+          updatedAt: {
+            type: "string",
+          },
+        },
+      },
+      Token: {
+        type: "object",
+        properties: {
+          token: {
+            type: "string",
+            format: "JWT",
           },
         },
       },

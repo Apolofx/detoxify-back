@@ -7,7 +7,7 @@ import swaggerUi from "swagger-ui-express";
 import { helpers } from "@utils";
 import { ignoreFavicon } from "./middlewares";
 import { swaggerDocument } from "./docs";
-import { health, mainRouter, authRouter } from "./routes";
+import { health, mainRouter } from "./routes";
 import passport from "passport";
 
 const { LocalStrategy, SentryInit } = helpers;
@@ -30,7 +30,6 @@ app.use(passport.initialize());
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/health", health);
-app.use("/auth", authRouter);
 app.use("/api", mainRouter);
 
 app.use("*", (req, res) => {

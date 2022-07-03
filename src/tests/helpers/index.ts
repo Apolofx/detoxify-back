@@ -29,11 +29,13 @@ export class TestUserFactory {
       if (e.code === "P2025") console.log("No users found to delete");
     }
     //create new authenticated admin user and login
-    const admin = await request(this.appInstance).post("/auth/register").send({
-      name: "admin_test_user",
-      email: "admin_test_user@test.com",
-      password: "admin_test_user",
-    });
+    const admin = await request(this.appInstance)
+      .post("/api/auth/register")
+      .send({
+        name: "admin_test_user",
+        email: "admin_test_user@test.com",
+        password: "admin_test_user",
+      });
     // update admin user with ADMIN role
     await prismaTest.user.update({
       data: {
@@ -45,7 +47,7 @@ export class TestUserFactory {
     });
     // get admin login data
     const loggedAdmin = await request(this.appInstance)
-      .post("/auth/login")
+      .post("/api/auth/login")
       .send({
         email: "admin_test_user@test.com",
         password: "admin_test_user",
@@ -73,14 +75,14 @@ export class TestUserFactory {
     }
     //create new authenticated regular user
     const regular = await request(this.appInstance)
-      .post("/auth/register")
+      .post("/api/auth/register")
       .send({
         name: "regular_test_user",
         email: "regular_test_user@test.com",
         password: "regular_test_user",
       });
     const loggedRegular = await request(this.appInstance)
-      .post("/auth/login")
+      .post("/api/auth/login")
       .send({
         email: "regular_test_user@test.com",
         password: "regular_test_user",
