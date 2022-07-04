@@ -53,7 +53,7 @@ jobs:
         with:
           node-version: "16.x"
       - name: Install Dependencies and run tests suite
-        run: yarn
+        run: npm install
       # - run: yarn test
 
       #Migrations
