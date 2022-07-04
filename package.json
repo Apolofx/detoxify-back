@@ -1,6 +1,9 @@
 {
   "name": "detoxify-back",
   "version": "0.0.0",
+  "engines": {
+    "node": "16.x"
+  },
   "description": "Express server backend for detoxify mobile app",
   "main": "index.ts",
   "license": "Apache License 2",
