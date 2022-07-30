@@ -135,6 +135,9 @@ users.get("/:id/snapshot", verifyRole("REGULAR"), async (req, res, next) => {
         achievements: true,
         userDetails: true,
         userConfig: true,
+        Team: true,
+        userStats: true,
+        events: true,
       },
     });
     const userWithoutPassword = helpers.exclude(user as User, "password");
