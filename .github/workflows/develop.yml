@@ -34,7 +34,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: "12.x"
+          node-version: "16.x"
       - name: Install dependencies
         run: yarn
       # run the migration in the test database
@@ -48,12 +48,12 @@ jobs:
     needs: test
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node 12
+      - name: Use Node 16
         uses: actions/setup-node@v1
         with:
-          node-version: "12.x"
+          node-version: "16.x"
       - name: Install Dependencies and run tests suite
-        run: yarn
+        run: npm install
       # - run: yarn test
 
       #Migrations
@@ -70,5 +70,5 @@ jobs:
           heroku_app_name: "detoxify-back-dev" #Must be unique in Heroku
           heroku_email: "nacho.conso@gmail.com"
           healthcheck: "https://detoxify-back-dev.herokuapp.com/health"
-          delay: 5
+          delay: 10
           rollbackonhealthcheckfailed: true

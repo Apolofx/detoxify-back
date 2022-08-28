@@ -5,26 +5,31 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  email        String        @unique
-  password     String
-  name         String?
-  role         UserRole      @default(REGULAR)
-  notificationToken String? 
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  userDetails  UserDetails?
-  userConfig   UserConfig?
-  events       Event[]
-  achievements Achievement[]
-  Team         Team?         @relation(fields: [teamId], references: [id])
-  teamId       Int?
+  id                Int           @id @default(autoincrement())
+  email             String        @unique
+  password          String
+  name              String?
+  role              UserRole      @default(REGULAR)
+  notificationToken String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  userDetails       UserDetails?
+  userConfig        UserConfig?
+  userStats         UserStats?
+  events            Event[]
+  achievements      Achievement[]
+  Team              Team?         @relation(fields: [teamId], references: [id])
+  teamId            Int?
 
   @@map("users")
 }
@@ -92,6 +97,9 @@ model UserStats {
   moneySaved  Int? @default(0) //in user currency
   lifeGain    Int? @default(0) //in days
   panicEvents Int? @default(0)
+  userId      Int  @unique
+  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
 
   @@map("users_stats")
 }

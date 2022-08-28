@@ -1,0 +1,112 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table users {
+  id Int [pk, increment]
+  email String [unique, not null]
+  password String [not null]
+  name String
+  role UserRole [not null, default: 'REGULAR']
+  notificationToken String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  userDetails user_details
+  userConfig users_config
+  userStats users_stats
+  events events [not null]
+  achievements achievements [not null]
+  Team teams
+  teamId Int
+}
+
+Table user_details {
+  id Int [pk, increment]
+  location String
+  age Int
+  gender Gender
+  smokerTime Int
+  smokesPerDay Int
+  quitAt DateTime
+  sports Boolean [not null, default: false]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  User users [not null]
+  userId Int [unique, not null]
+}
+
+Table events {
+  id Int [pk, increment]
+  type UserEvents [not null]
+  User users [not null]
+  userId Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table teams {
+  id Int [pk, increment]
+  name String [not null]
+  users users [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table achievements {
+  id Int [pk, increment]
+  name String [not null]
+  user users [not null]
+  userId Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table users_config {
+  id Int [pk, increment]
+  locale String [default: 'en']
+  user users [not null]
+  userId Int [unique, not null]
+}
+
+Table users_stats {
+  id Int [pk, increment]
+  moneySaved Int [default: 0]
+  lifeGain Int [default: 0]
+  panicEvents Int [default: 0]
+  userId Int [unique, not null]
+  user users [not null]
+}
+
+Enum Gender {
+  MALE
+  FEMALE
+  TRANSGENDER
+  NEUTRAL
+  NON_BINARY
+  AGENDER
+  PANGENDER
+}
+
+Enum UserEvents {
+  QUIT
+  RELAPSE
+  PANIC_ATTACK
+  ANXIETY
+}
+
+Enum UserRole {
+  ADMIN
+  REGULAR
+}
+
+Ref: users.teamId > teams.id
+
+Ref: user_details.userId - users.id [delete: Cascade]
+
+Ref: events.userId > users.id [delete: Cascade]
+
+Ref: achievements.userId > users.id [delete: Cascade]
+
+Ref: users_config.userId - users.id [delete: Cascade]
+
+Ref: users_stats.userId - users.id [delete: Cascade]
